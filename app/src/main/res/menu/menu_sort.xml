@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sort_name"
+        android:orderInCategory="1"
+        android:title="@string/menu_sort_name"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sort_distance"
+        android:orderInCategory="2"
+        android:title="@string/menu_sort_distance"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sort_time"
+        android:orderInCategory="3"
+        android:title="@string/menu_sort_arrival"
+        app:showAsAction="never" />
+</menu>

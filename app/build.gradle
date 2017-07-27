@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'carChallenge'
+            storeFile file('car.keystore')
+            storePassword 'carChallenge'
+        }
+    }
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.red.carchallenge"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        jackOptions {
+            enabled true
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'jsr305'
+    })
+    // dependency injection
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    // network
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.google.code.gson:gson:2.8.1'
+    // RxJava
+    compile 'io.reactivex:rxjava:1.3.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    // other
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    compile 'com.jakewharton:butterknife:8.7.0'
+    compile 'com.jakewharton:butterknife-compiler:8.7.0'
+    compile 'com.jakewharton.timber:timber:4.5.1'
+    testCompile 'junit:junit:4.12'
+    provided 'javax.annotation:jsr250-api:1.0'
+}

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Car Challenge</string>
+
+    <string name="menu_sort">Sort Menu</string>
+    <string name="menu_sort_name">Sort by name</string>
+    <string name="menu_sort_distance">Sort by distance</string>
+    <string name="menu_sort_arrival">Sort by arrival time</string>
+
+    <string name="arrival_time">Arrival time:</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+
+    <string name="title_error">An Error has Occurred</string>
+    <string name="ok">OK</string>
+    <string name="arrival_error">Arrival Time Not Available</string>
+
+    <plurals name="hours">
+        <item quantity="one">hour</item>
+        <item quantity="other">hours</item>
+    </plurals>
+
+    <plurals name="minutes">
+        <item quantity="one">minute</item>
+        <item quantity="other">minutes</item>
+    </plurals>
+    <string name="title_activity_maps">Map</string>
+</resources>

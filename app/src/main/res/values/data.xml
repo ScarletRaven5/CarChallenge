@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_base_url">http://localsearch.azurewebsites.net/api</string>
+
+    <string name="maps_api_key">AIzaSyDYNT-1WY7imP24eog30OB4R5cqxp_AS94</string>
+</resources>
