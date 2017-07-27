@@ -18,9 +18,9 @@ import android.widget.ProgressBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.red.carchallenge.App;
 import com.red.carchallenge.R;
-import com.red.carchallenge.injection.DaggerHomeActivityComponent;
-import com.red.carchallenge.injection.HomeActivityComponent;
-import com.red.carchallenge.injection.HomeActivityModule;
+import com.red.carchallenge.injection.homeactivity.DaggerHomeActivityComponent;
+import com.red.carchallenge.injection.homeactivity.HomeActivityComponent;
+import com.red.carchallenge.injection.homeactivity.HomeActivityModule;
 import com.red.carchallenge.view.LocationsAdapter;
 import com.red.carchallenge.viewmodel.HomeViewModel;
 
@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
         HomeActivityComponent component = DaggerHomeActivityComponent
                 .builder()
                 .homeActivityModule(new HomeActivityModule(this))
-                .appComponent(App.get(this).getAppComponent())
+                .applicationComponent(App.get(this).getApplicationComponent())
                 .build();
 
         component.injectHomeActivity(this);

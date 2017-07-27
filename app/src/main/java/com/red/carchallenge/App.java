@@ -3,16 +3,16 @@ package com.red.carchallenge;
 import android.app.Activity;
 import android.app.Application;
 
-import com.red.carchallenge.injection.AppComponent;
-import com.red.carchallenge.injection.ContextModule;
-import com.red.carchallenge.injection.DaggerAppComponent;
+import com.red.carchallenge.injection.app.ApplicationComponent;
+import com.red.carchallenge.injection.app.ContextModule;
+import com.red.carchallenge.injection.app.DaggerApplicationComponent;
 import com.red.carchallenge.network.LocationsService;
 
 import timber.log.Timber;
 
 public class App extends Application {
 
-    private AppComponent appComponent;
+    private ApplicationComponent applicationComponent;
     private LocationsService locationsService;
 
     public static App get(Activity activity) {
@@ -38,15 +38,15 @@ public class App extends Application {
 
         Timber.plant(new Timber.DebugTree());
 
-        appComponent = DaggerAppComponent
+        applicationComponent = DaggerApplicationComponent
                 .builder()
                 .contextModule(new ContextModule(this))
                 .build();
 
-        locationsService = appComponent.getLocationsService();
+        locationsService = applicationComponent.getLocationsService();
     }
 
-    public AppComponent getAppComponent() {
-        return appComponent;
+    public ApplicationComponent getApplicationComponent() {
+        return applicationComponent;
     }
 }

@@ -1,4 +1,4 @@
-package com.red.carchallenge.injection;
+package com.red.carchallenge.injection.homeactivity;
 
 import com.red.carchallenge.screens.HomeActivity;
 

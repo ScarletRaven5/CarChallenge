@@ -13,9 +13,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.red.carchallenge.App;
 import com.red.carchallenge.R;
-import com.red.carchallenge.injection.DaggerLocationDetailActivityComponent;
-import com.red.carchallenge.injection.LocationDetailActivityComponent;
-import com.red.carchallenge.injection.LocationDetailActivityModule;
+import com.red.carchallenge.injection.locationdetailactivity.DaggerLocationDetailActivityComponent;
+import com.red.carchallenge.injection.locationdetailactivity.LocationDetailActivityComponent;
+import com.red.carchallenge.injection.locationdetailactivity.LocationDetailActivityModule;
 import com.red.carchallenge.model.LocationResult;
 import com.red.carchallenge.viewmodel.LocationDetailViewModel;
 
@@ -67,7 +67,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         LocationDetailActivityComponent component = DaggerLocationDetailActivityComponent
                 .builder()
                 .locationDetailActivityModule(new LocationDetailActivityModule(this))
-                .appComponent(App.get(this).getAppComponent())
+                .applicationComponent(App.get(this).getApplicationComponent())
                 .build();
 
         component.injectLocationDetailActivity(this);

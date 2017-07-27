@@ -1,4 +1,4 @@
-package com.red.carchallenge.injection;
+package com.red.carchallenge.injection.app;
 
 import android.content.Context;
 
