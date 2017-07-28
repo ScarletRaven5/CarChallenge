@@ -1,4 +1,4 @@
-package com.red.carchallenge.screens;
+package com.red.carchallenge.view.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -18,9 +18,9 @@ import android.widget.ProgressBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.red.carchallenge.App;
 import com.red.carchallenge.R;
-import com.red.carchallenge.injection.DaggerHomeActivityComponent;
-import com.red.carchallenge.injection.HomeActivityComponent;
-import com.red.carchallenge.injection.HomeActivityModule;
+import com.red.carchallenge.injection.homeactivity.DaggerHomeActivityComponent;
+import com.red.carchallenge.injection.homeactivity.HomeActivityComponent;
+import com.red.carchallenge.injection.homeactivity.HomeActivityModule;
 import com.red.carchallenge.view.LocationsAdapter;
 import com.red.carchallenge.viewmodel.HomeViewModel;
 
@@ -33,7 +33,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class HomeActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class HomeActivity extends BaseActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     @BindView(R.id.recycler_locations)
     RecyclerView locationsRecycler;
@@ -43,46 +43,34 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
     @Inject
     HomeViewModel viewModel;
 
-
     private CompositeSubscription subscriptions;
     private LocationsAdapter locationsAdapter;
     private LocationManager locationManager;
 
-
-    /**
-     * Hold active loading observable subscriptions, so that they can be unsubscribed from when the activity is destroyed
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_locations);
+        setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
         HomeActivityComponent component = DaggerHomeActivityComponent
                 .builder()
                 .homeActivityModule(new HomeActivityModule(this))
-                .appComponent(App.get(this).getAppComponent())
+                .applicationComponent(App.get(this).getApplicationComponent())
                 .build();
 
         component.injectHomeActivity(this);
+
         subscriptions = new CompositeSubscription();
-
         locationsAdapter = new LocationsAdapter();
-        locationsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        locationsRecycler.setAdapter(locationsAdapter);
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         init();
-
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // unsubscribe from Observable to prevent memory leaks from leaked context
         subscriptions.unsubscribe();
     }
 
@@ -134,11 +122,10 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
                         this::handleError);
     }
 
-
     private Subscription subscribeToLoadingStatus() {
         return viewModel.isLoadingObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setIsLoading);
+                .subscribe(this::setIsLoadingIndicator);
     }
 
     private void handleError(Throwable throwable) {
@@ -146,13 +133,24 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
         alertDialog.setTitle(getResources().getString(R.string.title_error));
         alertDialog.setMessage(throwable.getMessage());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
-                getResources().getString(R.string.ok),
-                (dialog, which) -> dialog.dismiss());
+                getResources().getString(R.string.retry),
+                (dialog, which) -> init());
         alertDialog.show();
     }
 
-    private void setIsLoading(boolean isLoading) {
+    private void setIsLoadingIndicator(boolean isLoading) {
         loadingSpinner.setVisibility(viewModel.getLoadingVisibility(isLoading));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 200: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestAndFindLocation();
+                }
+            }
+        }
     }
 
     private void requestAndFindLocation() {
@@ -162,17 +160,6 @@ public class HomeActivity extends AppCompatActivity implements ActivityCompat.On
             Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             LatLng currentLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
             locationsAdapter.sortByDistance(currentLatLng);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 200: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    requestAndFindLocation();
-                }
-            }
         }
     }
 

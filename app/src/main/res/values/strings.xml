@@ -10,8 +10,8 @@
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
 
-    <string name="title_error">An Error has Occurred</string>
-    <string name="ok">OK</string>
+    <string name="title_error">An Error Has Occurred</string>
+    <string name="retry">Retry</string>
     <string name="arrival_error">Arrival Time Not Available</string>
 
     <plurals name="hours">
