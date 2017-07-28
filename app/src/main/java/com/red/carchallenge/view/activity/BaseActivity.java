@@ -1,4 +1,4 @@
-package com.red.carchallenge.screens;
+package com.red.carchallenge.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 

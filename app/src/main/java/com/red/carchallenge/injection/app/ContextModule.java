@@ -1,4 +1,4 @@
-package com.red.carchallenge.injection;
+package com.red.carchallenge.injection.app;
 
 import android.content.Context;
 
@@ -21,4 +21,5 @@ public class ContextModule {
     public Context context() {
         return context;
     }
+
 }

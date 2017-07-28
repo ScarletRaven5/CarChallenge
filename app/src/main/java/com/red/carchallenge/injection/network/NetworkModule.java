@@ -1,9 +1,9 @@
-package com.red.carchallenge.network;
+package com.red.carchallenge.injection.network;
 
 import android.content.Context;
 
-import com.red.carchallenge.injection.AppContext;
-import com.red.carchallenge.injection.AppModule;
+import com.red.carchallenge.injection.app.AppContext;
+import com.red.carchallenge.injection.app.ContextModule;
 
 import java.io.File;
 
@@ -16,18 +16,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
-@Module(includes = AppModule.class)
+@Module(includes = ContextModule.class)
 public class NetworkModule {
 
     @Provides
     @Singleton
     public HttpLoggingInterceptor loggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Timber.i(message);
-            }
-        });
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return interceptor;
     }
@@ -52,4 +47,5 @@ public class NetworkModule {
                 .cache(cache)
                 .build();
     }
+
 }

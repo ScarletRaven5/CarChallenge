@@ -2,13 +2,12 @@ package com.red.carchallenge.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.location.Location;
 import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.red.carchallenge.model.LocationResult;
-import com.red.carchallenge.screens.LocationDetailActivity;
+import com.red.carchallenge.view.activity.LocationDetailActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class LocationViewModel {
+public class LocationViewModel extends BaseViewModel{
     private LocationResult locationResult;
 
     public LocationViewModel(LocationResult locationResult) {
@@ -40,6 +39,12 @@ public class LocationViewModel {
         return results[0];
     }
 
+    /**
+     * Method that uses location's arrival time and finds how far in the future it is from the
+     * current time
+     *
+     * @return The difference between the future arrival time and current time
+     */
     public long getArrivalTimeInMillis() {
         DateFormat arrivalFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS", Locale.US);
         arrivalFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -58,10 +63,16 @@ public class LocationViewModel {
         }
     }
 
+    /**
+     * Method to send the user to the location's detail page
+     *
+     * @param view The view housing the location to view
+     */
     public void onClickLocation(View view) {
         Context context = view.getContext();
         Intent intent = new Intent(context, LocationDetailActivity.class);
         intent.putExtra(LocationDetailActivity.ARG, locationResult);
         context.startActivity(intent);
     }
+
 }

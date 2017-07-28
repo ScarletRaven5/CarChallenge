@@ -1,6 +1,5 @@
 package com.red.carchallenge.view;
 
-import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-@SuppressLint("ViewConstructor")
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.name_location)
@@ -34,7 +32,8 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.layout_location)
-    protected void clickLocation() {
+    public void clickLocation() {
         location.onClickLocation(itemView);
     }
+
 }

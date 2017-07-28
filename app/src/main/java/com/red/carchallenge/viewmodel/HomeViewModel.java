@@ -12,19 +12,23 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class HomeViewModel {
+public class HomeViewModel extends BaseViewModel {
     private LocationsService locationsService;
     private BehaviorSubject<List<LocationViewModel>> locationsSubject = BehaviorSubject.create(new ArrayList<>());
     private BehaviorSubject<Boolean> isLoadingSubject = BehaviorSubject.create(false);
-
 
     @Inject
     public HomeViewModel(LocationsService locationsService) {
         this.locationsService = locationsService;
     }
 
+    /**
+     * Method to get locations from the API
+     *
+     * @return The Observable object containing the locations from the API
+     */
     public Observable<List<LocationViewModel>> loadLocations() {
-        // Don't try and load if we're already loading
+        // Don't load if already loading
         if (isLoadingSubject.getValue()) {
             return Observable.empty();
         }
@@ -34,17 +38,11 @@ public class HomeViewModel {
         return locationsService
                 .getLocations()
                 .flatMapIterable(list -> list)
-                // Transform model to viewmodel
-                .map(location -> new LocationViewModel(location))
-                // Merge viewmodels into a single list to be emitted
+                .map(LocationViewModel::new)
                 .toList()
                 // Concatenate the new posts to the current posts list, then emit it via the post subject
                 .doOnNext(list -> locationsSubject.onNext(locationsSubject.getValue()))
                 .doOnTerminate(() -> isLoadingSubject.onNext(false));
-    }
-
-    public Observable<List<LocationViewModel>> locationsObservable() {
-        return locationsSubject.asObservable();
     }
 
     public Observable<Boolean> isLoadingObservable() {
@@ -54,4 +52,5 @@ public class HomeViewModel {
     public int getLoadingVisibility(boolean isLoading) {
         return isLoading ? View.VISIBLE : View.GONE;
     }
+
 }
