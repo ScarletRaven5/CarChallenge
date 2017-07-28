@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.red.carchallenge.model.LocationResult;
 import com.red.carchallenge.network.LocationsService;
-import com.red.carchallenge.screens.HomeActivity;
+import com.red.carchallenge.view.activity.HomeActivity;
 import com.red.carchallenge.viewmodel.HomeViewModel;
 
 import org.junit.Before;
@@ -77,4 +77,5 @@ public class HomeActivityTest extends ActivityTestRule {
         verify(testObservable).subscribeOn(Schedulers.io());
         verify(testObservable).observeOn(AndroidSchedulers.mainThread());
     }
+
 }

@@ -1,6 +1,6 @@
 package com.red.carchallenge.injection.homeactivity;
 
-import com.red.carchallenge.screens.HomeActivity;
+import com.red.carchallenge.view.activity.HomeActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,4 +19,5 @@ public class HomeActivityModule {
     public HomeActivity homeActivity() {
         return homeActivity;
     }
+
 }

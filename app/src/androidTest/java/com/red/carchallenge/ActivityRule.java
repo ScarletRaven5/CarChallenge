@@ -65,4 +65,5 @@ public class ActivityRule<T extends AppCompatActivity> implements TestRule {
         activity = (T) instrumentation.startActivitySync(intent);
         instrumentation.waitForIdleSync();
     }
+
 }

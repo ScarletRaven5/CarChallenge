@@ -1,4 +1,4 @@
-package com.red.carchallenge.screens;
+package com.red.carchallenge.view.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.red.carchallenge.App;
@@ -16,6 +15,7 @@ import com.red.carchallenge.injection.locationdetailactivity.DaggerLocationDetai
 import com.red.carchallenge.injection.locationdetailactivity.LocationDetailActivityComponent;
 import com.red.carchallenge.injection.locationdetailactivity.LocationDetailActivityModule;
 import com.red.carchallenge.model.LocationResult;
+import com.red.carchallenge.util.Utils;
 import com.red.carchallenge.viewmodel.LocationDetailViewModel;
 
 import butterknife.BindView;
@@ -59,7 +59,7 @@ public class LocationDetailActivity extends BaseActivity {
 
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle("MAP");
+            mapViewBundle = savedInstanceState.getBundle(MAP);
         }
         mapImage.onCreate(mapViewBundle);
 
@@ -78,7 +78,6 @@ public class LocationDetailActivity extends BaseActivity {
 
         init();
     }
-
 
     /**
      * According to MapView documentation:
@@ -101,7 +100,6 @@ public class LocationDetailActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mapImage.onDestroy();
-        // unsubscribe from Observable to prevent memory leaks from leaked context
         subscriptions.unsubscribe();
     }
 
@@ -140,7 +138,7 @@ public class LocationDetailActivity extends BaseActivity {
     }
 
     private void initViews() {
-        arrivalTimeText.setText(getTimeToArriveString(viewModel.getTimeToArriveInMillis()));
+        arrivalTimeText.setText(getTimeToArriveString());
         titleText.setText(viewModel.getName());
         addressText.setText(viewModel.getAddress());
         latitudeText.setText(String.format("%.2f", viewModel.getLatitude()));
@@ -150,7 +148,7 @@ public class LocationDetailActivity extends BaseActivity {
     private void initSubscriptions() {
         subscriptions.addAll(
                 subscribeToMapReadyObservable(),
-                subscribeToMap());
+                subscribeToMapMarker());
     }
 
     private Subscription subscribeToMapReadyObservable() {
@@ -158,13 +156,12 @@ public class LocationDetailActivity extends BaseActivity {
                 .subscribe(mapSubject);
     }
 
-    private Subscription subscribeToMap() {
+    private Subscription subscribeToMapMarker() {
         return mapSubject.subscribe(this::addMarkerToMap);
     }
 
     private void getMap(final Subscriber<? super GoogleMap> subscriber) {
-        OnMapReadyCallback mapReadyCallback = subscriber::onNext;
-        mapImage.getMapAsync(mapReadyCallback);
+        mapImage.getMapAsync(subscriber::onNext);
     }
 
     private void addMarkerToMap(GoogleMap map) {
@@ -173,28 +170,34 @@ public class LocationDetailActivity extends BaseActivity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18));
     }
 
-    public String getTimeToArriveString(long millis) {
-        if (millis == -1) {
-            return getResources().getString(R.string.arrival_error);
-        } else {
-            long seconds = millis / 1000;
-            long minutes = seconds / 60;
-            long hours = minutes / 60;
+    public String getTimeToArrive(long millis) {
+        long seconds = millis / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
 
-            if (hours >= 1) {
+        int option = Utils.getArrivalTimeCategory(millis);
+
+        switch (option) {
+            case Utils.TIME_MINUTES:
+                return String.format("%d %s", minutes, getMinutesString(minutes));
+            case Utils.TIME_HOURS:
                 long remainderMinutes = minutes - (hours * 60);
-                return String.format("%d %s %d %s", hours, getHoursText(hours), remainderMinutes, getMinutesText(remainderMinutes));
-            } else {
-                return String.format("%d %s", minutes, getMinutesText(minutes));
-            }
+                return String.format("%d %s %d %s", hours, getHoursString(hours), remainderMinutes, getMinutesString(remainderMinutes));
+            case Utils.TIME_ERROR:
+            default:
+                return getResources().getString(R.string.arrival_error);
         }
     }
 
-    private String getHoursText(long quantity) {
+    public String getTimeToArriveString() {
+        return getTimeToArrive(viewModel.getTimeToArriveInMillis());
+    }
+
+    private String getHoursString(long quantity) {
         return getResources().getQuantityString(R.plurals.hours, (int) quantity);
     }
 
-    private String getMinutesText(long quantity) {
+    private String getMinutesString(long quantity) {
         return getResources().getQuantityString(R.plurals.minutes, (int) quantity);
     }
 

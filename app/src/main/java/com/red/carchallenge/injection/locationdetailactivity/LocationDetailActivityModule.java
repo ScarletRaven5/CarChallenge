@@ -1,6 +1,6 @@
 package com.red.carchallenge.injection.locationdetailactivity;
 
-import com.red.carchallenge.screens.LocationDetailActivity;
+import com.red.carchallenge.view.activity.LocationDetailActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,4 +19,5 @@ public class LocationDetailActivityModule {
     public LocationDetailActivity locationDetailActivity() {
         return locationDetailActivity;
     }
+
 }

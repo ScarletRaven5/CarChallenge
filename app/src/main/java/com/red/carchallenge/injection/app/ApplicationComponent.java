@@ -13,4 +13,5 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     LocationsService getLocationsService();
+
 }

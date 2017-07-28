@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.red.carchallenge.model.LocationResult;
 import com.red.carchallenge.network.LocationsService;
-import com.red.carchallenge.screens.HomeActivity;
+import com.red.carchallenge.view.activity.HomeActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

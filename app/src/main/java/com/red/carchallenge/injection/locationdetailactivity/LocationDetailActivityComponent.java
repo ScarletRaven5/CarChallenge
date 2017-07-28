@@ -2,7 +2,7 @@ package com.red.carchallenge.injection.locationdetailactivity;
 
 import com.red.carchallenge.injection.app.ApplicationComponent;
 import com.red.carchallenge.injection.homeactivity.HomeActivityScope;
-import com.red.carchallenge.screens.LocationDetailActivity;
+import com.red.carchallenge.view.activity.LocationDetailActivity;
 
 import dagger.Component;
 
@@ -11,4 +11,5 @@ import dagger.Component;
 public interface LocationDetailActivityComponent {
 
     void injectLocationDetailActivity(LocationDetailActivity locationDetailActivity);
+
 }

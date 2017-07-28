@@ -9,6 +9,10 @@ import java.util.TimeZone;
 
 public class Utils {
 
+    public static final int TIME_ERROR = 0;
+    public static final int TIME_HOURS = 1;
+    public static final int TIME_MINUTES = 2;
+
     public static long getCurrentTimeInMillis() {
         DateFormat currentFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         // Using user's default timezone
@@ -29,4 +33,20 @@ public class Utils {
             return -1;
         }
     }
+
+    public static int getArrivalTimeCategory(long millis) {
+        if (millis == -1) {
+            return TIME_ERROR;
+        } else {
+            // (1000 millis per second) per (60 seconds per minute) per (60 minutes per hour)
+            long hours = millis / 1000 / 60 / 60;
+
+            if (hours >= 1) {
+                return TIME_HOURS;
+            } else {
+                return TIME_MINUTES;
+            }
+        }
+    }
+
 }

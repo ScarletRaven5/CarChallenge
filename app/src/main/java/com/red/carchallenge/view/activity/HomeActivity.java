@@ -1,4 +1,4 @@
-package com.red.carchallenge.screens;
+package com.red.carchallenge.view.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -43,7 +43,6 @@ public class HomeActivity extends BaseActivity implements ActivityCompat.OnReque
     @Inject
     HomeViewModel viewModel;
 
-
     private CompositeSubscription subscriptions;
     private LocationsAdapter locationsAdapter;
     private LocationManager locationManager;
@@ -72,7 +71,6 @@ public class HomeActivity extends BaseActivity implements ActivityCompat.OnReque
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Unsubscribe from Observable to prevent memory leaks
         subscriptions.unsubscribe();
     }
 
@@ -124,11 +122,10 @@ public class HomeActivity extends BaseActivity implements ActivityCompat.OnReque
                         this::handleError);
     }
 
-
     private Subscription subscribeToLoadingStatus() {
         return viewModel.isLoadingObservable()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setIsLoading);
+                .subscribe(this::setIsLoadingIndicator);
     }
 
     private void handleError(Throwable throwable) {
@@ -137,22 +134,12 @@ public class HomeActivity extends BaseActivity implements ActivityCompat.OnReque
         alertDialog.setMessage(throwable.getMessage());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
                 getResources().getString(R.string.retry),
-                (dialog, which) -> requestAndFindLocation());
+                (dialog, which) -> init());
         alertDialog.show();
     }
 
-    private void setIsLoading(boolean isLoading) {
+    private void setIsLoadingIndicator(boolean isLoading) {
         loadingSpinner.setVisibility(viewModel.getLoadingVisibility(isLoading));
-    }
-
-    private void requestAndFindLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
-        } else {
-            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            LatLng currentLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            locationsAdapter.sortByDistance(currentLatLng);
-        }
     }
 
     @Override
@@ -163,6 +150,16 @@ public class HomeActivity extends BaseActivity implements ActivityCompat.OnReque
                     requestAndFindLocation();
                 }
             }
+        }
+    }
+
+    private void requestAndFindLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+        } else {
+            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            LatLng currentLatLng = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            locationsAdapter.sortByDistance(currentLatLng);
         }
     }
 

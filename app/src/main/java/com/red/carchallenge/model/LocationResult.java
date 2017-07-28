@@ -20,7 +20,6 @@ public class LocationResult extends BaseModel implements Parcelable {
     @SerializedName("ArrivalTime")
     private String arrivalTime;
 
-
     public int getId() {
         return id;
     }
@@ -45,7 +44,7 @@ public class LocationResult extends BaseModel implements Parcelable {
         return arrivalTime;
     }
 
-    protected LocationResult(Parcel in) {
+    private LocationResult(Parcel in) {
         id = in.readInt();
         name = in.readString();
         latitude = in.readDouble();
@@ -53,8 +52,6 @@ public class LocationResult extends BaseModel implements Parcelable {
         address = in.readString();
         arrivalTime = in.readString();
     }
-
-
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

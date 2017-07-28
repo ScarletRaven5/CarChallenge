@@ -22,7 +22,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     public HttpLoggingInterceptor loggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor( message -> Timber.i(message));
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return interceptor;
     }
@@ -47,4 +47,5 @@ public class NetworkModule {
                 .cache(cache)
                 .build();
     }
+
 }

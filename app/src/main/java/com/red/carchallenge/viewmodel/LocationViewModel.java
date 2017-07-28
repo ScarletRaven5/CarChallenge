@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.red.carchallenge.model.LocationResult;
-import com.red.carchallenge.screens.LocationDetailActivity;
+import com.red.carchallenge.view.activity.LocationDetailActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -63,4 +63,5 @@ public class LocationViewModel {
         intent.putExtra(LocationDetailActivity.ARG, locationResult);
         context.startActivity(intent);
     }
+
 }
