@@ -2,7 +2,6 @@ package com.red.carchallenge.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.location.Location;
 import android.view.View;
 

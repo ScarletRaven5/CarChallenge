@@ -1,9 +1,8 @@
-package com.red.carchallenge.network;
+package com.red.carchallenge.injection.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.red.carchallenge.network.LocationsService;
-import com.red.carchallenge.network.NetworkModule;
 
 import javax.inject.Singleton;
 

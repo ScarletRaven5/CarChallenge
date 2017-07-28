@@ -34,7 +34,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.layout_location)
-    protected void clickLocation() {
+    public void clickLocation() {
         location.onClickLocation(itemView);
     }
 }

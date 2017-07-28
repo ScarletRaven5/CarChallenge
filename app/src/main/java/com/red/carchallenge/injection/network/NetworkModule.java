@@ -1,4 +1,4 @@
-package com.red.carchallenge.network;
+package com.red.carchallenge.injection.network;
 
 import android.content.Context;
 

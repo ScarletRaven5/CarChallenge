@@ -19,19 +19,6 @@ public class App extends Application {
         return (App) activity.getApplication();
     }
 
-
-    //   Activity
-
-    //LocationsService   picasso
-
-    //retrofit    OkHttp3Downloader
-
-    //gson      okhttp
-
-    //      logger    cache
-
-    //      timber           file
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -42,11 +29,10 @@ public class App extends Application {
                 .builder()
                 .contextModule(new ContextModule(this))
                 .build();
-
-        locationsService = applicationComponent.getLocationsService();
     }
 
     public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
+
 }

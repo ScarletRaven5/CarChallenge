@@ -1,7 +1,6 @@
 package com.red.carchallenge.screens;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -28,7 +27,7 @@ import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
 import rx.subscriptions.Subscriptions;
 
-public class LocationDetailActivity extends AppCompatActivity {
+public class LocationDetailActivity extends BaseActivity {
 
     public static final String ARG = "LOCATION";
     public static final String MAP = "MAP";
@@ -141,7 +140,7 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        arrivalTimeText.setText(viewModel.getFormattedArrivalTime(getApplicationContext()));
+        arrivalTimeText.setText(getTimeToArriveString(viewModel.getTimeToArriveInMillis()));
         titleText.setText(viewModel.getName());
         addressText.setText(viewModel.getAddress());
         latitudeText.setText(String.format("%.2f", viewModel.getLatitude()));
@@ -155,12 +154,8 @@ public class LocationDetailActivity extends AppCompatActivity {
     }
 
     private Subscription subscribeToMapReadyObservable() {
-        return Observable.create(new Observable.OnSubscribe<GoogleMap>() {
-            @Override
-            public void call(final Subscriber<? super GoogleMap> subscriber) {
-                getMap(subscriber);
-            }
-        }).subscribe(mapSubject);
+        return Observable.unsafeCreate((Observable.OnSubscribe<GoogleMap>) this::getMap)
+                .subscribe(mapSubject);
     }
 
     private Subscription subscribeToMap() {
@@ -176,6 +171,31 @@ public class LocationDetailActivity extends AppCompatActivity {
         LatLng position = new LatLng(locationResult.getLatitude(), locationResult.getLongitude());
         map.addMarker(new MarkerOptions().position(position));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18));
+    }
+
+    public String getTimeToArriveString(long millis) {
+        if (millis == -1) {
+            return getResources().getString(R.string.arrival_error);
+        } else {
+            long seconds = millis / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+
+            if (hours >= 1) {
+                long remainderMinutes = minutes - (hours * 60);
+                return String.format("%d %s %d %s", hours, getHoursText(hours), remainderMinutes, getMinutesText(remainderMinutes));
+            } else {
+                return String.format("%d %s", minutes, getMinutesText(minutes));
+            }
+        }
+    }
+
+    private String getHoursText(long quantity) {
+        return getResources().getQuantityString(R.plurals.hours, (int) quantity);
+    }
+
+    private String getMinutesText(long quantity) {
+        return getResources().getQuantityString(R.plurals.minutes, (int) quantity);
     }
 
 }
