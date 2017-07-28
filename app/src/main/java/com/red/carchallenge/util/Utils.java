@@ -13,6 +13,11 @@ public class Utils {
     public static final int TIME_HOURS = 1;
     public static final int TIME_MINUTES = 2;
 
+    /**
+     * Method that returns the corrent time in milliseconds
+     *
+     * @return The current time in milliseconds
+     */
     public static long getCurrentTimeInMillis() {
         DateFormat currentFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         // Using user's default timezone
@@ -21,20 +26,31 @@ public class Utils {
         return Calendar.getInstance().getTime().getTime();
     }
 
+    /**
+     * Method that converts API's formatted date to milliseconds
+     *
+     * @param locationArrivalTime The location's arrival time coming from the API
+     * @return The arrival time in milliseconds
+     */
     public static long getArrivalTimeInMillis(String locationArrivalTime) {
         DateFormat arrivalFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);
         // Assuming API's timezone is in UTC
         arrivalFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
-            long huh = arrivalFormatter.parse(locationArrivalTime).getTime();
-            return huh;
+            return arrivalFormatter.parse(locationArrivalTime).getTime();
         } catch (ParseException e) {
             return -1;
         }
     }
 
-    public static int getArrivalTimeCategory(long millis) {
+    /**
+     * Method that states whether the time is over an hour, under and hour, or errored
+     *
+     * @param millis The total milliseconds until arrival
+     * @return The category the amount of time falls into
+     */
+    public static int getTimeUntilArrivalCategory(long millis) {
         if (millis == -1) {
             return TIME_ERROR;
         } else {

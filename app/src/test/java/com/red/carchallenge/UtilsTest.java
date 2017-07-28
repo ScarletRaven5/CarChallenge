@@ -18,11 +18,11 @@ public class UtilsTest {
 
     @Test
     public void testGetArrivalTimeCategory() {
-        int actualOver = Utils.getArrivalTimeCategory(15000000);
+        int actualOver = Utils.getTimeUntilArrivalCategory(15000000);
         int expectedOver = 1;
         assertEquals("Time is an hour or over", expectedOver, actualOver, 0);
 
-        int actualUnder = Utils.getArrivalTimeCategory(1500000);
+        int actualUnder = Utils.getTimeUntilArrivalCategory(1500000);
         int expectedUnder = 2;
         assertEquals("Time is under an hour", expectedUnder, actualUnder, 0);
     }

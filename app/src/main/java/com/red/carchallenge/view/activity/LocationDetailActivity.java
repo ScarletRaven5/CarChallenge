@@ -138,7 +138,7 @@ public class LocationDetailActivity extends BaseActivity {
     }
 
     private void initViews() {
-        arrivalTimeText.setText(getTimeToArriveString());
+        arrivalTimeText.setText(getTimeUntilArrivalString());
         titleText.setText(viewModel.getName());
         addressText.setText(viewModel.getAddress());
         latitudeText.setText(String.format("%.2f", viewModel.getLatitude()));
@@ -170,12 +170,12 @@ public class LocationDetailActivity extends BaseActivity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 18));
     }
 
-    public String getTimeToArrive(long millis) {
+    public String getTimeUntilArrival(long millis) {
         long seconds = millis / 1000;
         long minutes = seconds / 60;
         long hours = minutes / 60;
 
-        int option = Utils.getArrivalTimeCategory(millis);
+        int option = Utils.getTimeUntilArrivalCategory(millis);
 
         switch (option) {
             case Utils.TIME_MINUTES:
@@ -189,8 +189,8 @@ public class LocationDetailActivity extends BaseActivity {
         }
     }
 
-    public String getTimeToArriveString() {
-        return getTimeToArrive(viewModel.getTimeToArriveInMillis());
+    public String getTimeUntilArrivalString() {
+        return getTimeUntilArrival(viewModel.getTimeUntilArrivalInMillis());
     }
 
     private String getHoursString(long quantity) {

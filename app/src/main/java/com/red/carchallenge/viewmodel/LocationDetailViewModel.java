@@ -3,7 +3,7 @@ package com.red.carchallenge.viewmodel;
 import com.red.carchallenge.model.LocationResult;
 import com.red.carchallenge.util.Utils;
 
-public class LocationDetailViewModel {
+public class LocationDetailViewModel extends BaseViewModel {
 
     private LocationResult locationResult;
 
@@ -35,7 +35,7 @@ public class LocationDetailViewModel {
         return locationResult.getArrivalTime();
     }
 
-    public long getTimeToArriveInMillis() {
+    public long getTimeUntilArrivalInMillis() {
         return Utils.getArrivalTimeInMillis(getArrivalTime()) - Utils.getCurrentTimeInMillis();
     }
 
